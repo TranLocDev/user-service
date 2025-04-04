@@ -1,20 +1,21 @@
-const User = require('../models/user.model');
+const User = require("../models/user.model");
 
 class UserService {
-  async register(username, password) {
+  async register(username, password, email) {
     // Check if username or email already exists
     const existingUser = await User.findOne({
-      $or: [{ username }]
+      $or: [{ username }, { email }],
     });
 
     if (existingUser) {
-      throw new Error('Username or email already exists');
+      throw new Error("Username or email already exists");
     }
 
     // Create new user
     const user = new User({
       username,
       password,
+      email,
     });
 
     await user.save();
@@ -22,17 +23,17 @@ class UserService {
     return {
       id: user._id,
       username: user.username,
-      createdAt: user.createdAt
+      createdAt: user.createdAt,
     };
   }
 
   async getUserById(userId) {
-    const user = await User.findById(userId).select('-password -refreshToken');
+    const user = await User.findById(userId).select("-password -refreshToken");
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
     return user;
   }
 }
 
-module.exports = new UserService(); 
+module.exports = new UserService();
