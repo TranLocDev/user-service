@@ -12,8 +12,15 @@ const registerValidation = [
   body('password')
     .notEmpty().withMessage('Password is required')
     .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+  body('email')
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Invalid email format'),
+  body('fullname')
+    .notEmpty().withMessage('Fullname is required')
+    .isLength({ min: 3 }).withMessage('Fullname must be at least 3 characters long')
 ];
 
 router.post('/register', registerValidation, validateRequest, userController.register);
+router.get('/profile', authMiddleware, userController.getProfile);
 
 module.exports = router; 

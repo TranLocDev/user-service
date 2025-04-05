@@ -9,8 +9,22 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: 3
   },
+  fullname: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 3
+  },
   email: {
-    
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    minlength: 3
+  },
+  avatar: {
+    type: String,
+    default: process.env.DEFAULT_IMAGE
   },
   password: {
     type: String,

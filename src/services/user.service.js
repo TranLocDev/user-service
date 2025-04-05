@@ -1,10 +1,10 @@
 const User = require("../models/user.model");
 
 class UserService {
-  async register(username, password, email) {
+  async register(username, password, email, fullname) {
     // Check if username or email already exists
     const existingUser = await User.findOne({
-      $or: [{ username }, { email }],
+      $or: [{ username }, { email }]
     });
 
     if (existingUser) {
@@ -16,6 +16,7 @@ class UserService {
       username,
       password,
       email,
+      fullname
     });
 
     await user.save();
