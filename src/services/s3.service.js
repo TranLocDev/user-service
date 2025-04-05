@@ -1,56 +1,73 @@
-const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client } = require('@aws-sdk/client-s3');
+const { Upload } = require('@aws-sdk/lib-storage');
+const fs = require('fs');
+const config = require('../config');
 const { v4: uuidv4 } = require('uuid');
+const { DeleteObjectCommand } = require('@aws-sdk/client-s3');
 require('dotenv').config();
 
-class S3Service {
-  constructor() {
-    this.s3Client = new S3Client({
-      region: process.env.AWS_REGION,
-      credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-      }
-    });
-  }
+const s3Client = new S3Client({
+  region: config.aws.region || process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: config.aws.accessKeyId || process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: config.aws.secretAccessKey || process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
 
+class S3Service {
   async uploadImage(file) {
     try {
-      const fileExtension = file.originalname.split('.').pop();
-      const key = `uploads/${uuidv4()}.${fileExtension}`;
+      if (!file || !file.path) {
+        throw new Error('No file provided');
+      }
+
+      const bucketName = config.aws.bucketName || process.env.S3_BUCKET_NAME;
+      if (!bucketName) {
+        throw new Error('S3 bucket name is not configured');
+      }
+
+      // Read file from disk
+      const fileStream = fs.createReadStream(file.path);
       
-      const uploadParams = {
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: key,
-        Body: file.buffer,
-        ContentType: file.mimetype,
-        ACL: 'public-read'
-      };
+      const upload = new Upload({
+        client: s3Client,
+        params: {
+          Bucket: bucketName,
+          Key: `users/${Date.now()}-${file.originalname}`,
+          Body: fileStream,
+          ContentType: file.mimetype,
+        },
+      });
 
-      const command = new PutObjectCommand(uploadParams);
-      await this.s3Client.send(command);
-
-      return {
-        url: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`,
-        key: key
-      };
+      const result = await upload.done();
+      
+      // Delete temporary file
+      fs.unlinkSync(file.path);
+      
+      return result;
     } catch (error) {
       console.error('Error uploading to S3:', error);
-      throw new Error('Failed to upload file to S3');
+      throw new Error('Failed to upload image to S3');
     }
   }
 
   async deleteImage(fileUrl) {
     try {
+      const bucketName = config.aws.bucketName || process.env.S3_BUCKET_NAME;
+      if (!bucketName) {
+        throw new Error('S3 bucket name is not configured');
+      }
+
       const urlParts = new URL(fileUrl);
       const key = decodeURIComponent(urlParts.pathname.slice(1));
 
       const deleteParams = {
-        Bucket: process.env.S3_BUCKET_NAME,
+        Bucket: bucketName,
         Key: key
       };
 
       const command = new DeleteObjectCommand(deleteParams);
-      await this.s3Client.send(command);
+      await s3Client.send(command);
 
       return true;
     } catch (error) {

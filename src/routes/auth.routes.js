@@ -14,11 +14,8 @@ const refreshTokenValidation = [
   body('refreshToken').notEmpty().withMessage('Refresh token is required')
 ];
 
-// Public routes
 router.post('/login', loginValidation, validateRequest, authController.login);
 router.post('/refresh-token', refreshTokenValidation, validateRequest, authController.refreshToken);
-
-// Protected routes
 router.post('/logout', authMiddleware, authController.logout);
 
 module.exports = router; 

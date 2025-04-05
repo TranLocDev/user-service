@@ -15,6 +15,14 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: 3
   },
+  bio: {
+    type: String,
+    default: null
+  },
+  link: {
+    type: String,
+    default: null
+  },
   email: {
     type: String,
     required: true,

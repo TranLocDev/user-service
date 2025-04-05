@@ -35,6 +35,25 @@ class UserService {
     }
     return user;
   }
+
+  async updateProfile(userId, updateData) {
+    // Remove undefined or null values
+    const cleanUpdateData = Object.fromEntries(
+      Object.entries(updateData).filter(([_, v]) => v != null)
+    );
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $set: cleanUpdateData },
+      { new: true, runValidators: true }
+    ).select("-password -refreshToken");
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  }
 }
 
 module.exports = new UserService();

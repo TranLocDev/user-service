@@ -4,6 +4,7 @@ const { body } = require('express-validator');
 const userController = require('../controllers/user.controller');
 const { validateRequest } = require('../middleware/validator');
 const { authMiddleware } = require('../middleware/auth.middleware');
+const upload = require('../middleware/upload.middleware');
 
 const registerValidation = [
   body('username')
@@ -22,5 +23,6 @@ const registerValidation = [
 
 router.post('/register', registerValidation, validateRequest, userController.register);
 router.get('/profile', authMiddleware, userController.getProfile);
+router.patch('/profile', authMiddleware, upload.single('file'), userController.updateProfile);
 
 module.exports = router; 
