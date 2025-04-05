@@ -9,6 +9,8 @@ const { createServiceProxy } = require('./middleware/proxy');
 const connectDB = require('./config/database');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
+const s3Routes = require('./routes/s3.routes');
+const { authMiddleware } = require('./middleware/auth.middleware');
 
 const app = express();
 
@@ -37,15 +39,13 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Auth routes
 app.use('/api/auth', authRoutes);
-
-// User routes
-app.use('/api/users', userRoutes);
+app.use('/api/users', userRoutes);    
+app.use('/api/s3', s3Routes);
 
 // Service routes
 // Thêm các service routes tại đây
-// app.use('/api/product', createServiceProxy('product'));
+app.use('/api/product', authMiddleware, createServiceProxy('product'));
 // app.use('/api/order', createServiceProxy('order'));
 // app.use('/api/payment', createServiceProxy('payment'));
 
