@@ -42,7 +42,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 app.use((req, res, next) => {
-  console.log(`Nhận yêu cầu: ${req.method} ${req.url}`);
+  console.log(`Nhận yêu cầu : ${req.method} ${req.url}`);
   console.log('Headers:', req.headers);
   next();
 });
