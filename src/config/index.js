@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-    module.exports = {
+module.exports = {
   aws: {
     region: process.env.AWS_REGION,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -10,7 +10,7 @@ require('dotenv').config();
 
   port: process.env.PORT || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
-  
+
   // MongoDB Configuration
   mongodbUri: process.env.MONGODB_URI,
   dbName: process.env.DB_NAME,
@@ -20,10 +20,11 @@ require('dotenv').config();
   jwtExpiresIn: process.env.JWT_EXPIRES_IN,
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
   refreshTokenExpiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN,
-  
+
   // Service URLs
   services: {
     product: process.env.PRODUCT_SERVICE_URL,
+    posts: process.env.POST_SERVICE_URL,
     // Có thể thay thế tên bằng service khác
     // order: process.env.ORDER_SERVICE_URL,
     // payment: process.env.PAYMENT_SERVICE_URL,

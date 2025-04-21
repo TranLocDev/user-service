@@ -22,8 +22,6 @@ connectDB();
 // Basic middleware
 app.use(helmet());
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Swagger documentation
@@ -43,16 +41,17 @@ const limiter = rateLimit({
   },
 });
 app.use(limiter);
+app.use((req, res, next) => {
+  console.log(`Nhận yêu cầu: ${req.method} ${req.url}`);
+  console.log('Headers:', req.headers);
+  next();
+});
+app.use('/api/auth', express.json(), express.urlencoded({ extended: true }), authRoutes);
+app.use('/api/users', express.json(), express.urlencoded({ extended: true }), userRoutes);
+app.use('/api/s3', express.json(), express.urlencoded({ extended: true }), s3Routes);
 
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);    
-app.use('/api/s3', s3Routes);
-
-// Service routes
-// Thêm các service routes tại đây
-app.use('/api/product', authMiddleware, createServiceProxy('product'));
-// app.use('/api/order', createServiceProxy('order'));
-// app.use('/api/payment', createServiceProxy('payment'));
+// Proxy routes – no body parsers applied
+app.use('/api/posts', authMiddleware, createServiceProxy('posts'));
 
 // Error handling
 app.use(errorLogger);
