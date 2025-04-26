@@ -21,6 +21,10 @@ const createServiceProxy = (serviceName) => {
       });
     },
     onProxyReq: (proxyReq, req, res) => {
+      // Truyền thông tin user nếu có
+      if (req.user) {
+        proxyReq.setHeader('x-user-info', JSON.stringify(req.user));
+      }
       proxyReq.setHeader('x-forwarded-for', req.ip);
     },
   });
