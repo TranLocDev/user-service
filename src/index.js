@@ -51,7 +51,8 @@ app.use('/api/users', express.json(), express.urlencoded({ extended: true }), us
 app.use('/api/s3', express.json(), express.urlencoded({ extended: true }), s3Routes);
 
 // Proxy routes – no body parsers applied
-app.use('/api/posts', authMiddleware, createServiceProxy('posts'));
+app.use('/api/write', authMiddleware, createServiceProxy('write'));
+// app.use('/api/comments', authMiddleware, createServiceProxy('comments'));
 
 // Error handling
 app.use(errorLogger);
