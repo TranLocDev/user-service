@@ -27,7 +27,7 @@ class UserController {
 
   async getProfile(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user._id;
       const user = await userService.getUserById(userId);
 
       res.json({
@@ -44,7 +44,7 @@ class UserController {
 
   async updateProfile(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user._id;
       const { fullname, bio, link } = req.body;
       let avatarUrl = null;
 
