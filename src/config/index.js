@@ -23,8 +23,8 @@ module.exports = {
 
   // Service URLs
   services: {
-    // product: process.env.PRODUCT_SERVICE_URL,
-    posts: process.env.POST_SERVICE_URL,
+    write: process.env.POST_SERVICE_URL,
+    comments: process.env.COMMENT_SERVICE_URL,
     // Có thể thay thế tên bằng service khác
     // order: process.env.ORDER_SERVICE_URL,
     // payment: process.env.PAYMENT_SERVICE_URL,

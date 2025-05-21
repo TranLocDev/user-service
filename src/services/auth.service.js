@@ -39,7 +39,7 @@ class AuthService {
 
   async logout(userId) {
     try {
-      await User.findByIdAndUpdate(userId, { 
+      await User.findByIdAndUpdate(userId, {
         refreshToken: null,
         lastLogoutAt: new Date()
       });
@@ -84,14 +84,15 @@ class AuthService {
   async validateToken(token) {
     try {
       const decoded = jwt.verify(token, config.jwtSecret);
-      const user = await User.findById(decoded.userId);
-      
+      const user = await User.findById(decoded.userId).select("_id fullname avatar isActive");
+
       if (!user || !user.isActive) {
+        console.log('User not found or inactive ============================');
         throw new Error('Invalid token');
       }
 
       return {
-        userId: user._id.toString(),
+        ...user.toObject(),
         role: user.role
       };
     } catch (error) {
