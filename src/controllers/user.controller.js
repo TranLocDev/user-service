@@ -6,7 +6,7 @@ class UserController {
     try {
       const { username, password, email, fullname } = req.body;
       const user = await userService.register(username, password, email, fullname);
-      
+
       res.status(201).json({
         success: true,
         message: "User registered successfully",
@@ -22,7 +22,7 @@ class UserController {
 
   async getProfile(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user._id;
       const user = await userService.getUserById(userId);
 
       res.json({
@@ -39,7 +39,7 @@ class UserController {
 
   async updateProfile(req, res) {
     try {
-      const userId = req.user.userId;
+      const userId = req.user._id;
       const { fullname, bio, link } = req.body;
       let avatarUrl = null;
 

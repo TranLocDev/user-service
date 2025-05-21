@@ -23,7 +23,8 @@ const createServiceProxy = (serviceName) => {
     onProxyReq: (proxyReq, req, res) => {
       // Truyền thông tin user nếu có
       if (req.user) {
-        proxyReq.setHeader('x-user-info', JSON.stringify(req.user));
+        const userInfo = Buffer.from(JSON.stringify(req.user)).toString('base64');
+        proxyReq.setHeader('x-user-info', userInfo);
       }
       proxyReq.setHeader('x-forwarded-for', req.ip);
     },
