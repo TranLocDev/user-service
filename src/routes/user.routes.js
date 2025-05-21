@@ -24,5 +24,7 @@ const registerValidation = [
 router.post('/register', registerValidation, validateRequest, userController.register);
 router.get('/profile', authMiddleware, userController.getProfile);
 router.patch('/profile', authMiddleware, upload.single('file'), userController.updateProfile);
+// routes/user.routes.js
+router.post('/list', userController.getListUserByIds);
 
 module.exports = router; 

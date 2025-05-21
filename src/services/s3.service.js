@@ -28,22 +28,23 @@ class S3Service {
 
       // Read file from disk
       const fileStream = fs.createReadStream(file.path);
-      
+
       const upload = new Upload({
         client: s3Client,
         params: {
           Bucket: bucketName,
-          Key: `users/${Date.now()}-${file.originalname}`,
+          Key: `thread-images/${Date.now()}-${file.originalname}`,
           Body: fileStream,
           ContentType: file.mimetype,
+          ACL: 'public-read'
         },
       });
 
       const result = await upload.done();
-      
+
       // Delete temporary file
       fs.unlinkSync(file.path);
-      
+
       return result;
     } catch (error) {
       console.error('Error uploading to S3:', error);

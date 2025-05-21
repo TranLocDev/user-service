@@ -71,6 +71,34 @@ class UserController {
       });
     }
   }
+
+  // controllers/user.controller.js
+  async getListUserByIds(req, res) {
+    try {
+      const { userIds } = req.body;
+
+      if (!Array.isArray(userIds) || userIds.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "userIds must be a non-empty array",
+        });
+      }
+
+      const users = await userService.getListUserByIds(userIds);
+
+      res.json({
+        success: true,
+        data: users,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message || 'Internal server error',
+      });
+    }
+  }
+
+
 }
 
 module.exports = new UserController();

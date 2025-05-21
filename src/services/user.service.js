@@ -54,6 +54,20 @@ class UserService {
 
     return user;
   }
+  // services/user.service.js
+  async getListUserByIds(userIds) {
+    const users = await User.find({ _id: { $in: userIds } })
+      .select("_id avatar fullname isActive")
+      .lean();
+
+    if (!users || users.length === 0) {
+      throw new Error("No users found");
+    }
+
+    return users;
+  }
+
+
 }
 
 module.exports = new UserService();
