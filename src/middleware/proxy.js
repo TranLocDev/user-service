@@ -3,7 +3,7 @@ const config = require("../config");
 
 const createServiceProxy = (serviceName) => {
   const serviceUrl = config.services[serviceName];
-
+  console.log("serviceUrl", serviceUrl);
   if (!serviceUrl) {
     throw new Error(`Service URL not found for ${serviceName}`);
   }
