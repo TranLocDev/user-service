@@ -20,7 +20,7 @@ const authMiddleware = async (req, res, next) => {
     const userInfo = await authService.validateToken(token);
     console.log('Token validated, user info:', userInfo);
 
-    if (!userInfo || !userInfo.userId) {
+    if (!userInfo || !userInfo._id) {
       console.log('Invalid user info from token');
       return res.status(401).json({
         success: false,
@@ -31,7 +31,7 @@ const authMiddleware = async (req, res, next) => {
     // Set user information in request
     req.user = userInfo;
     console.log('User set in request:', req.user);
-    
+
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);
