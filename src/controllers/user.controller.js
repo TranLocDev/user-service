@@ -71,8 +71,7 @@ class UserController {
       });
     }
   }
-
-  // controllers/user.controller.js
+  // Get list of users by IDs
   async getListUserByIds(req, res) {
     try {
       const { userIds } = req.body;
@@ -97,7 +96,6 @@ class UserController {
       });
     }
   }
-
 
 }
 

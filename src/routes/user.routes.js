@@ -5,6 +5,7 @@ const userController = require('../controllers/user.controller');
 const { validateRequest } = require('../middleware/validator');
 const { authMiddleware } = require('../middleware/auth.middleware');
 const upload = require('../middleware/upload.middleware');
+const followController = require('../controllers/follow.controller');
 
 const registerValidation = [
   body('username')
@@ -24,7 +25,14 @@ const registerValidation = [
 router.post('/register', registerValidation, validateRequest, userController.register);
 router.get('/profile', authMiddleware, userController.getProfile);
 router.patch('/profile', authMiddleware, upload.single('file'), userController.updateProfile);
+
 // routes/user.routes.js
 router.post('/list', userController.getListUserByIds);
 
-module.exports = router; 
+// ----------------FOLLOW USER----------------
+
+// Follow/unfollow a user
+router.post('/follow', authMiddleware, followController.toggleFollow);
+
+
+module.exports = router;
