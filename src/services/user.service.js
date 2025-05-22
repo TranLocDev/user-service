@@ -4,7 +4,7 @@ class UserService {
   async register(username, password, email, fullname) {
     // Check if username or email already exists
     const existingUser = await User.findOne({
-      $or: [{ username }, { email }]
+      $or: [{ username }, { email }],
     });
 
     if (existingUser) {
@@ -16,7 +16,7 @@ class UserService {
       username,
       password,
       email,
-      fullname
+      fullname,
     });
 
     await user.save();
@@ -34,6 +34,13 @@ class UserService {
       throw new Error("User not found");
     }
     return user;
+  }
+
+  async getUserByIds(userIds) {
+    const users = await User.find({ _id: { $in: userIds } }).select(
+      "-password -refreshToken"
+    );
+    return users;
   }
 
   async updateProfile(userId, updateData) {

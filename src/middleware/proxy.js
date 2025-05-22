@@ -1,8 +1,9 @@
-const { createProxyMiddleware } = require('http-proxy-middleware');
-const config = require('../config');
+const { createProxyMiddleware } = require("http-proxy-middleware");
+const config = require("../config");
 
 const createServiceProxy = (serviceName) => {
   const serviceUrl = config.services[serviceName];
+  console.log("serviceUrl", serviceUrl);
   if (!serviceUrl) {
     throw new Error(`Service URL not found for ${serviceName}`);
   }
@@ -21,11 +22,19 @@ const createServiceProxy = (serviceName) => {
       });
     },
     onProxyReq: (proxyReq, req, res) => {
-      proxyReq.setHeader('x-forwarded-for', req.ip);
+      // Truyền thông tin user nếu có
+      console.log("req.user", req.user);
+      if (req.user) {
+        const userInfo = Buffer.from(JSON.stringify(req.user)).toString(
+          "base64"
+        );
+        proxyReq.setHeader("x-user-info", userInfo);
+      }
+      proxyReq.setHeader("x-forwarded-for", req.ip);
     },
   });
 };
 
 module.exports = {
   createServiceProxy,
-}; 
+};

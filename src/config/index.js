@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 
 module.exports = {
   aws: {
@@ -9,7 +9,7 @@ module.exports = {
   },
 
   port: process.env.PORT || 3000,
-  nodeEnv: process.env.NODE_ENV || 'development',
+  nodeEnv: process.env.NODE_ENV || "development",
 
   // MongoDB Configuration
   mongodbUri: process.env.MONGODB_URI,
@@ -23,9 +23,7 @@ module.exports = {
 
   // Service URLs
   services: {
-    product: process.env.PRODUCT_SERVICE_URL,
-    posts: process.env.POST_SERVICE_URL,
-    search: process.env.SEARCH_SERVICE_URL,
+    write: process.env.POST_SERVICE_URL,
     // Có thể thay thế tên bằng service khác
     // order: process.env.ORDER_SERVICE_URL,
     // payment: process.env.PAYMENT_SERVICE_URL,
@@ -39,6 +37,6 @@ module.exports = {
 
   // Logging
   logging: {
-    level: process.env.LOG_LEVEL || 'info',
+    level: process.env.LOG_LEVEL || "info",
   },
-}; 
+};
