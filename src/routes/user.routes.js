@@ -34,5 +34,9 @@ router.post('/list', userController.getListUserByIds);
 // Follow/unfollow a user
 router.post('/follow', authMiddleware, followController.toggleFollow);
 
+// Get followers of a user 
+router.get('/:userId/followers', authMiddleware, followController.getFollowers);
+
+
 
 module.exports = router;

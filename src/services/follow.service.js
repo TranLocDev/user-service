@@ -17,6 +17,16 @@ class FollowService {
         return await followModel.findOneAndDelete({ follower: followerId, following: followingId });
     }
 
+    async getFollowers(userId, page = 1, limit = 10) {
+        const skip = (page - 1) * limit;
+        let result = await followModel.find({ following: userId })
+            .skip(skip).limit(limit)
+            .populate('follower', '_id fullname avatar isActive')
+            .select("follower")
+            .lean();
+        return result.map(item => item.follower);
+    };
+
 
 };
 
