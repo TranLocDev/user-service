@@ -33,13 +33,23 @@ class followController {
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
             const followers = await followService.getFollowers(userId, page, limit);
-            res.json({ data: followers, success: true });
+            res.json({ data: { followers, followerCount: followers.length }, success: true });
         } catch (error) {
             next(error);
         }
     }
 
-
+    async getFollowing(req, res, next) {
+        try {
+            const { userId } = req.params;
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+            const following = await followService.getFollowing(userId, page, limit);
+            res.json({ data: { following, followingCount: following.length }, success: true });
+        } catch (error) {
+            next(error);
+        }
+    }
 
 }
 

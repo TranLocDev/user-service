@@ -27,7 +27,15 @@ class FollowService {
         return result.map(item => item.follower);
     };
 
-
+    async getFollowing(userId, page = 1, limit = 10) {
+        const skip = (page - 1) * limit;
+        let result = await followModel.find({ follower: userId })
+            .skip(skip).limit(limit)
+            .populate('following', '_id fullname avatar isActive')
+            .select("following")
+            .lean();
+        return result.map(item => item.following);
+    }
 };
 
 module.exports = new FollowService();
