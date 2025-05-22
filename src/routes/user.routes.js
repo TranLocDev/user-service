@@ -40,4 +40,5 @@ router.get('/:userId/followers', authMiddleware, followController.getFollowers);
 // Get following of a user
 router.get('/:userId/following', authMiddleware, followController.getFollowing);
 
+
 module.exports = router;
