@@ -1,5 +1,6 @@
 const userService = require("../services/user.service");
 const s3Service = require("../services/s3.service");
+const User = require("../models/user.model");
 
 class UserController {
   async register(req, res) {
@@ -94,6 +95,25 @@ class UserController {
         success: false,
         message: error.message || 'Internal server error',
       });
+    }
+  }
+
+  async searchUsers(req, res, next) {
+    try {
+      const { q = '', page = 1, limit = 10 } = req.query;
+      const skip = (Number(page) - 1) * Number(limit);
+
+      const users = await User.find({
+        fullname: { $regex: q, $options: 'i' }
+      })
+        .skip(skip)
+        .limit(Number(limit))
+        .select('_id fullname avatar isActive')
+        .lean();
+
+      res.json({ data: users, success: true });
+    } catch (error) {
+      next(error);
     }
   }
 

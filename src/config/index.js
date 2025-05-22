@@ -24,6 +24,7 @@ module.exports = {
   // Service URLs
   services: {
     write: process.env.POST_SERVICE_URL,
+    search: process.env.SEARCH_SERVICE_URL,
     // Có thể thay thế tên bằng service khác
     // order: process.env.ORDER_SERVICE_URL,
     // payment: process.env.PAYMENT_SERVICE_URL,
